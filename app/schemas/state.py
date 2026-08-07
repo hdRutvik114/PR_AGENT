@@ -14,8 +14,6 @@ class WorkflowState(BaseModel):
     test_results: Optional[str] =None
     report: Optional[str]=None 
     evidence:List[Evidence] = []
-    
-
 # [
 #     Evidence(
 #         source="repository_search",
