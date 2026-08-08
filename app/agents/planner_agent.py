@@ -3,7 +3,9 @@ from app.prompts.planner_prompt import PLANNER_PROMPT
 
 class PlannerAgent(BaseAgent):
     
+    #Here there is no constructor defined,we have inherited the constructor from BaseAgent class which takes llm_service as an argument and initializes the llm and logger attributes.
     
+    # but in main we have passed the llm serive as dependency injection to the PlannerAgent class which is then passed to the BaseAgent class constructor and initialized in the llm attribute of the BaseAgent class.
     def run(self,state):
         self.logger.info("Planner Agent Started")
         

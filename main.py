@@ -24,8 +24,8 @@ def main():
 
     print("\n========== EVIDENCE ==========")
 
-    for evidence in state.evidence:
-        print(evidence)
+    for evidences in state.evidence:
+        print(evidences)
 
 
 if __name__ == "__main__":

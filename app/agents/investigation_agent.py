@@ -7,6 +7,7 @@ from app.tools.repository_search_tool import RepositorySearchTool
 class InvestigationAgent(BaseAgent):
 
     def __init__(self, llm_service):
+        # here we are calling the constructor of the BaseAgent class using super() and passing the llm_service argument to it. This ensures that the llm attribute is properly initialized in the BaseAgent class.
         super().__init__(llm_service)
 
         self.search_tool = RepositorySearchTool()
@@ -21,6 +22,8 @@ class InvestigationAgent(BaseAgent):
         )
 
         response = self.llm.invoke(prompt)
+        self.logger.info(f"Investigation response: {response.content}")
+        self.logger.info(f"Investigation response type: {type(response.content)}")
 
         # 1. Safely handle response.content whether it's a string or a list
         if isinstance(response.content, list):
@@ -41,6 +44,7 @@ class InvestigationAgent(BaseAgent):
         ]
 
         # 3. Search using the extracted keywords
+        self.logger.info(f"Investigation keywords: {keywords}")
         for keyword in keywords:
             files = self.search_tool.search(
                 state.repository_path,
