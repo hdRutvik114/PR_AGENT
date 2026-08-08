@@ -51,15 +51,44 @@ class InvestigationAgent(BaseAgent):
                 keyword
             )
 
+            # FOR EACH file we found during search
             for file in files:
+            
+              # 1. First, check if this file is ALREADY in state.evidence
+              already_exists = False
+            
+              for evidence in state.evidence:
+                if (
+                    evidence.content == file
+                    and evidence.source == "repository_search"
+                ):
+                  already_exists = True
+                  break  # Found a duplicate, stop checking this file!
+            
+              # 2. If it's NOT a duplicate, create and append new Evidence
+              if not already_exists:
+                new_evidence = Evidence(source="repository_search", content=file)
+                state.evidence.append(new_evidence)
+                
+                
+                # This one is the same as the below code but in a more readable way and also it is more efficient because it breaks the loop when it finds a duplicate instead of checking all the evidence.
+                '''for file in files:
 
-                state.evidence.append(
-                    Evidence(
-                        source="repository_search",
-                        content=file
-                    )
-                )
-
+                     if not any(
+                         evidence.content == file
+                         and evidence.source == "repository_search"
+                         for evidence in state.evidence
+                     ):
+                         state.evidence.append(
+                             Evidence(
+                                 source="repository_search",
+                                 content=file
+                             )
+                         )'''
+            
+            
+            
+            
         self.logger.info("Investigation completed.")
 
         return state
