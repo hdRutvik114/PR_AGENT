@@ -10,7 +10,7 @@ def main():
 
     state = WorkflowState(
         issue="Login API returns 500 when email is missing.",
-        repository_path="sample_repo"
+        repository_path="C:\\Users\\YATIRAJ\\OneDrive\\Desktop\\PR review Ai\\sample_repo"
     )
 
     planner = PlannerAgent(llm_service)
@@ -21,7 +21,7 @@ def main():
 
     print("\n========== INVESTIGATION PLAN ==========")
     print(state.investigation_plan)
-
+    
     print("\n========== EVIDENCE ==========")
 
     for evidences in state.evidence:
