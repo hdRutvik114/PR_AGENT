@@ -3,7 +3,7 @@ from app.prompts.investigation_prompt import INVESTIGATION_PROMPT
 from app.schemas.evidence import Evidence
 from app.tools.repository_search_tool import RepositorySearchTool
 from langchain_core.tools import tool
-from langchain_core.messages import ToolMessage 
+from langchain_core.messages import ToolMessage,HumanMessage,SystemMessage
 
 class InvestigationAgent(BaseAgent):
 
@@ -32,10 +32,15 @@ class InvestigationAgent(BaseAgent):
         tool_map={
             tool.name:tool for tool in self.tools
         }
+        messages=[SystemMessage(content="You are a software investigation agent")]
+        
+        
+        messages.append(response)
+        
         
         
         for tool_call in response.tool_calls:
-            
+            tool_call_id = tool_call.get('id') or tool_call.get('tool_call_id') 
             tool_name=tool_call['name']
             tool_args=tool_call['args']
             
@@ -48,7 +53,17 @@ class InvestigationAgent(BaseAgent):
             
             self.logger.info(f"Tool Results:{result}")
             
-        
+            messages.append(ToolMessage(content=str(result),tool_call_id=tool_call_id))
+            
+            response=self.llm_with_tools.invoke(messages)
+            self.logger.info(f"Response from the LLM_after the tool call {response[0]}")
+            
+            # Only append if there are more tool calls to process
+            if response.tool_calls:
+                messages.append(response)
+            else:
+                self.log# Append the assistant's next tool call
+            
         # # 1. Safely handle response.content whether it's a string or a list
         # if isinstance(response.content, list):
         #     content_text = "".join(
